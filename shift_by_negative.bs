@@ -89,6 +89,10 @@ div.newnumbered li:before {
 }
 </style>
 
+Note: The following changes are relative to the post-Rapperswil 2018 working draft of ISO/IEC 14882, ([[N4762]]).
+
+Note: The � character is used to denote a placeholder number which shall be selected by the editor.
+
 Modify 23.6.14 <a href="http://eel.is/c++draft/alg.shift">[alg.shift]</a> as follows:
 
 <blockquote>
