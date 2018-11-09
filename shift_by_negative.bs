@@ -7,7 +7,7 @@ Distributed under the Boost Software License v1.0 (boost.org/LICENSE_1_0.txt)
 <pre class='metadata'>
 Title: Wording for Shift-by-negative in `shift_left` and `shift_right`
 H1: Wording for Shift-by-negative in <code>shift_left</code> and <code>shift_right</code>
-Shortname: D1233R0
+Shortname: D1233
 Revision: 2
 Status: D
 Group: WG21
