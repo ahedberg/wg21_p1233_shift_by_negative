@@ -1,0 +1,163 @@
+<!--
+Copyright (c) 2018 NVIDIA Corporation 
+Author: Bryce Adelstein Lelbach <brycelelbach@gmail.com>
+
+Distributed under the Boost Software License v1.0 (boost.org/LICENSE_1_0.txt)
+-->
+<pre class='metadata'>
+Title: Wording for Shift-by-negative in `shift_left` and `shift_right`
+H1: Wording for Shift-by-negative in <code>shift_left</code> and <code>shift_right</code>
+Shortname: D1233R0
+Revision: 2
+Status: D
+Group: WG21
+Audience: LWG
+Editor: Ashley Hedberg, Google, ahedberg@google.com
+Editor: Matt Calabrese, Google, metaprogrammingtheworld@gmail.com
+Editor: Bryce Adelstein Lelbach, NVIDIA, brycelelbach@gmail.com
+URL: https://wg21.link/P1233R2
+!Source: <a href="https://github.com/brycelelbach/wg21_p1233_shift_by_negative/blob/master/shift_by_negative.bs">GitHub</a>
+Issue Tracking: GitHub https://github.com/brycelelbach/wg21_p1233_shift_by_negative/issues
+Metadata Order: Author, This Version, Source, Issue Tracking, Project, Audience
+Markup Shorthands: markdown yes
+No Abstract: yes
+Toggle Diffs: yes
+Boilerplate: style-syntax-highlighting off
+</pre>
+
+<style>
+pre {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+.ins, ins, ins *, span.ins, span.ins * {
+  background-color: rgb(200, 250, 200);
+  color: rgb(0, 136, 0);
+  text-decoration: none;
+}
+.del, del, del *, span.del, span.del * {
+  background-color: rgb(250, 200, 200);
+  color: rgb(255, 0, 0);
+  text-decoration: line-through;
+  text-decoration-color: rgb(255, 0, 0);
+}
+math, span.math {
+  font-family: serif;
+  font-style: italic;
+}
+ul {
+  list-style-type: "— ";
+}
+blockquote {
+  counter-reset: paragraph;
+}
+div.numbered, div.newnumbered {
+  margin-left: 2em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+div.numbered:before, div.newnumbered:before {
+  position: absolute;
+  margin-left: -2em;
+  display-style: block;
+}
+div.numbered:before {
+  content: counter(paragraph);
+  counter-increment: paragraph;
+}
+div.newnumbered:before {
+  content: "�";
+}
+div.numbered ul, div.newnumbered ul {
+  counter-reset: list_item;
+}
+div.numbered li, div.newnumbered li {
+  margin-left: 3em;
+}
+div.numbered li:before, div.newnumbered li:before {
+  position: absolute;
+  margin-left: -4.8em;
+  display-style: block;
+}
+div.numbered li:before {
+  content: "(" counter(paragraph) "." counter(list_item) ")";
+  counter-increment: list_item;
+}
+div.newnumbered li:before {
+  content: "(�." counter(list_item) ")";
+  counter-increment: list_item;
+}
+</style>
+
+Modify 23.6.14 <a href="http://eel.is/c++draft/alg.shift">[alg.shift]</a> as follows:
+
+<blockquote>
+<b>23.6.14 Shift<span style="float: right;">[alg.shift]</span></b>
+
+```
+template<class ForwardIterator>
+  constexpr ForwardIterator
+    shift_left(ForwardIterator first, ForwardIterator last,
+               typename iterator_traits<ForwardIterator>::difference_type n);
+template<class ExecutionPolicy, class ForwardIterator>
+  ForwardIterator
+    shift_left(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last,
+               typename iterator_traits<ForwardIterator>::difference_type n);
+```
+
+<div class="numbered">
+<span class="del">*Requires:*</span><span class="ins">*Mandates:*</span> The type of `*first` shall satisfy the <i>Cpp17MoveAssignable</i> requirements.
+</div>
+
+<div class="ins">
+<div class="newnumbered">
+*Expects:* `n >= 0`.
+</div>
+</div>
+
+<div class="numbered">
+*Effects:* If <span class="del">`n <= 0` or </span>`n >= last - first`, does nothing. Otherwise, moves the element from position `first + n + i` into position `first + i` for each non-negative integer `i < (last - first) - n`. In the first overload case, does so in order starting from `i = 0` and proceeding to `i = (last - first) - n - 1`.
+</div>
+
+<div class="numbered">
+*Returns:* `first + (last - first - n)` if `n` is positive and `n < last - first`, otherwise `first` if `n` is positive, otherwise last.
+</div>
+
+<div class="numbered">
+*Complexity:* At most `(last - first) - n` assignments.
+</div>
+
+```
+template<class ForwardIterator>
+  constexpr ForwardIterator
+    shift_right(ForwardIterator first, ForwardIterator last,
+                typename iterator_traits<ForwardIterator>::difference_type n);
+template<class ExecutionPolicy, class ForwardIterator>
+  ForwardIterator
+    shift_right(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last,
+                typename iterator_traits<ForwardIterator>::difference_type n);
+```
+
+<div class="numbered">
+<span class="del">*Requires:*</span><span class="ins">*Mandates:*</span> The type of `*first` shall satisfy the <i>Cpp17MoveAssignable</i> requirements. <i>ForwardIterator</i> shall meet the <i>Cpp17BidirectionalIterator</i> requirements (<a href="http://eel.is/c++draft/bidirectional.iterators">[bidirectional.iterators]</a>) or the <i>Cpp17ValueSwappable</i> requirements.
+</div>
+
+<div class="ins">
+<div class="newnumbered">
+*Expects:* `n >= 0`.
+</div>
+</div>
+
+<div class="numbered">
+*Effects:* If <span class="del">`n <= 0` or </span>`n >= last - first`, does nothing. Otherwise, moves the element from position `first + i` into position `first + n + i` for each non-negative integer `i < (last - first) - n`. In the first overload case, if <i>ForwardIterator</i> satisfies the <i>Cpp17BidirectionalIterator</i> requirements, does so in order starting from `i = (last - first) - n - 1` and proceeding to `i = 0`.
+</div>
+
+<div class="numbered">
+*Returns:* `first + n` if `n` is positive and `n < last - first`, otherwise `last` if `n` is positive, otherwise `first`.
+</div>
+
+<div class="numbered">
+*Complexity:* At most `(last - first) - n` assignments or swaps.
+</div>
+</blockquote>
+
