@@ -120,7 +120,7 @@ template<class ExecutionPolicy, class ForwardIterator>
 </div>
 
 <div class="numbered">
-*Returns:* `first + (last - first - n)` if `n` is positive and `n < last - first`, otherwise `first` if `n` is positive, otherwise last.
+*Returns:* `first + (last - first - n)` if <span class="del">`n` is positive and </span>`n < last - first`, otherwise `first`<span class="del"> if `n` is positive, otherwise last</span>.
 </div>
 
 <div class="numbered">
@@ -153,11 +153,10 @@ template<class ExecutionPolicy, class ForwardIterator>
 </div>
 
 <div class="numbered">
-*Returns:* `first + n` if `n` is positive and `n < last - first`, otherwise `last` if `n` is positive, otherwise `first`.
+*Returns:* `first + n` if <span class="del">`n` is positive and </span>`n < last - first`, otherwise `last`<span class="del"> if `n` is positive, otherwise `first`</span>.
 </div>
 
 <div class="numbered">
 *Complexity:* At most `(last - first) - n` assignments or swaps.
 </div>
 </blockquote>
-
